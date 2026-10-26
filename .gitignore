@@ -1,0 +1,23 @@
+# Python environment and build output
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Test and tool caches
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Editors and OS files
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Personal Claude Code settings (the shared .claude/settings.json stays tracked)
+.claude/settings.local.json

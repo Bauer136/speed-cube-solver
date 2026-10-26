@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "speedsolver"
+version = "0.1.0"
+description = "Rubik's cube speed-solving assistant: human-method solutions on a live 3D cube"
+requires-python = ">=3.10"
+dependencies = ["ursina>=7"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+speedsolver = "speedsolver.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["speedsolver*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

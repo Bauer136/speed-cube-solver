@@ -64,11 +64,36 @@ no browser UI and no hosted server. The visual runs in a native desktop window.
 - **Visual first**: the cube display and move scrubbing are central to the
   experience, not an extra.
 
+## Settled Decisions
+- **First method: CFOP**, color neutral by default. The user can limit the
+  allowed cross colors (e.g. white/yellow only) in the window or with
+  `--colors`. Among the allowed colors the solver keeps the one whose *whole*
+  solution is fastest, not just the shortest cross, and shows every color's
+  total. The solver tries each allowed cross color
+  (with the inspection rotation shown as its own stage), the optimal crosses
+  that are easiest to execute, and a beam search over F2L pair orders. For
+  each pair it takes the optimal ⟨U,R,F,L,B⟩ sequences that keep the cross
+  and earlier pairs and keeps the easiest to execute. Like a human, it may
+  turn the cube with `y` before a pair so the pair goes in with R/U/F/L
+  instead of B moves; a dynamic program picks the orientation for every
+  step. OLL/PLL are recognised by table lookup in whatever orientation the
+  cube is held, trying every pre-AUF so moves cancel into the previous
+  stage. Roux, ZZ and Petrus come later, behind the same method interface
+  (`variants()` + `solve()`).
+- **"Fastest" = estimated execution time** (`speedsolver/ergonomics.py`):
+  per-move times where R/U are quickest, L/F/D slower, B slowest, half turns
+  take longer and rotations cost a little (free during inspection). STM is
+  shown next to it, and `--metric STM|HTM|QTM` ranks by move count instead.
+  The weights are a rough first model, not measured data.
+- **Algorithm sets (for now): full OLL (57) and full PLL (21).** Tests check
+  that every algorithm keeps F2L intact and that the sets cover all 216
+  orientation cases and all 288 permutation cases.
+
 ## Open Decisions (to be settled as the project develops)
-- Which methods to support first (CFOP is the likely starting point).
-- How "fastest" is measured: move count (HTM/STM/QTM), estimated execution
-  time (finger-trick ergonomics, regrips), or a mix.
-- Algorithm sets to include (full OLL/PLL, COLL, ZBLL, etc.).
+- Refining the execution-time model: calibrate the weights against real
+  timings and model regrips and move-to-move flow (e.g. R U R' U' flows,
+  F after R needs a regrip), which per-move weights cannot capture.
+- Further algorithm sets (COLL, ZBLL, F2L case algorithms, alternatives per case).
 - Whether to add other input modes (clicking stickers to paint a physical
   cube's state, camera input) alongside notation.
 - Puzzle scope beyond 3x3.
